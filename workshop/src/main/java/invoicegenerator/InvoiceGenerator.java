@@ -22,7 +22,7 @@ public class InvoiceGenerator {
         return nf;
     }
 
-    private double simpleTax(double valor) {
-        return valor * 0.06;
+    private double simpleTax(double value) {
+        return value * 0.06;
     }
 }
