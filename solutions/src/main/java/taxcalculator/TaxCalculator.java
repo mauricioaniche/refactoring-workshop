@@ -2,20 +2,14 @@ package taxcalculator;
 
 public class TaxCalculator {
 
-    private final TaxIdentifier identifier;
+    private TaxCalculationResolver resolver;
 
-    public TaxCalculator(TaxIdentifier identifier) {
-        this.identifier = identifier;
+    public TaxCalculator(TaxCalculationResolver resolver) {
+        this.resolver = resolver;
     }
-
     public double calculateTax(Employee employee) {
-        // ... bigger business rule here ...
-
-        TaxStrategy taxStrategy = identifier.getStrategy(employee);
-        double taxToPay = taxStrategy.calculate(employee);
-
-        // .. continue here ...
-        return taxToPay;
+        TaxCalculationStrategy strategy = resolver.forRole(employee.getRole());
+        return strategy.calculate(employee);
     }
 
 }

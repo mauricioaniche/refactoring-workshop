@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Puzzle {
+public class PuzzleSolver {
 
     private int input;
     private int output;
@@ -13,7 +13,7 @@ public class Puzzle {
     private List<Number> queue;
     private Set<Integer> visited;
 
-    public Puzzle() {
+    public PuzzleSolver() {
         this.queue = new ArrayList<>();
         this.visited = new HashSet<>();
     }
@@ -22,7 +22,8 @@ public class Puzzle {
         this.input = input;
         this.output = output;
 
-        return searchForSolution();
+        Number solution = searchForSolution();
+        return solution;
     }
 
     private Number searchForSolution() {

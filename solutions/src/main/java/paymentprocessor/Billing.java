@@ -9,12 +9,15 @@ public class Billing {
     private List<Payment> payments = new ArrayList<>();
 
     public List<Payment> getPayments() {
-        // the return here is immutable now
         return Collections.unmodifiableList(payments);
     }
 
-    public void addPayment(Installment installment) {
-        Payment payment = new Payment(installment.getAmount());
+    public void addPayment(Payment payment) {
+
+        // new rule, you implement here!
+        if(payments.size() > 10)
+            throw new RuntimeException("Maximum number of payments reached!");
+
         this.payments.add(payment);
     }
 }

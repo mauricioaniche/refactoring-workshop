@@ -4,23 +4,26 @@ import java.util.List;
 
 public class InvoiceGenerator {
 
-    private final List<GeneratedInvoiceAction> actions;
+    private List<InvoiceGeneratedAction> actions;
 
-    public InvoiceGenerator(List<GeneratedInvoiceAction> actions) {
+    public InvoiceGenerator(List<InvoiceGeneratedAction> actions) {
         this.actions = actions;
     }
 
     public Invoice generate(ProvidedService providedService) {
 
         double amount = providedService.getMonthlyAmount();
-        Invoice generatedInvoice = new Invoice(amount, simpleTax(amount));
 
-        actions.forEach(action -> action.execute(generatedInvoice));
+        Invoice invoice = new Invoice(amount, simpleTax(amount));
 
-        return generatedInvoice;
+        for (InvoiceGeneratedAction action : actions) {
+            action.process(invoice);
+        }
+
+        return invoice;
     }
 
-    private double simpleTax(double valor) {
-        return valor * 0.06;
+    private double simpleTax(double value) {
+        return value * 0.06;
     }
 }

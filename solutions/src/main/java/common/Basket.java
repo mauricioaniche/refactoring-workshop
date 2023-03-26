@@ -19,8 +19,19 @@ public class Basket {
 
     }
 
-    public void subtract(double amount) {
-        this.amount -= amount;
+    /**
+     * Aplica desconto baseado em porcentagem.
+     * Se a porcentagem de desconto for invalida, nenhum desconto é aplicado.
+     *
+     * @param discountPercentage porcentagem, [0.0, 1.0]
+     */
+    public void applyDiscountByPercentage(double discountPercentage) {
+        if(discountPercentage < 0 || discountPercentage > 1) {
+            //throw new IllegalArgumentException("Invalid discount percentage");
+            return;
+        }
+
+        this.amount -= this.amount * discountPercentage;
     }
 
     public double getAmount() {

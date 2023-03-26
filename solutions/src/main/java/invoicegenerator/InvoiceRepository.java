@@ -1,5 +1,7 @@
 package invoicegenerator;
 
-public interface InvoiceRepository {
-    void persist(Invoice invoice);
+public class InvoiceRepository {
+    void persist(Invoice invoice) {
+
+    }
 }

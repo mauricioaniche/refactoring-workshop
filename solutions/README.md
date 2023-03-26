@@ -1,7 +1,5 @@
-# Solutions
+# Workshop
 
-This repository contains the solutions of the workshop.
+This project contains many exercises for you to exercise your knowledge on SOLID, refactoring, and design patterns.
 
-Note that there might be many different ways of re-designing the code, and this is just one suggestion.
-
-Please, do not look at it before solving them yourself! :)
+Feel free to play with it!

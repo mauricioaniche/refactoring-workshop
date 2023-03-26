@@ -1,25 +1,34 @@
 package discountapplier;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DiscountApplierFactory {
 
-    /**
-     * You may want to get this data from the DB!!
-     */
-    public DiscountApplier create() {
+	private DiscountRepository repository;
 
-        return new DiscountApplier(Arrays.asList(
-                // discounts per product
-                new DiscountPerProduct(Arrays.asList("MACBOOK", "IPHONE"), 0.15),
-                new DiscountPerProduct(Arrays.asList("NOTEBOOK", "WINDOWS PHONE"), 0.12),
-                new DiscountPerProduct(Arrays.asList("XBOX"), 0.7),
+	public DiscountApplierFactory(DiscountRepository repository) {
+		this.repository = repository;
+	}
 
-                // discounts per amount
-                new DiscountPerAmount(amount -> amount <= 1000, qty -> qty <= 2, 0.02),
-                new DiscountPerAmount(amount -> amount > 3000, qty -> qty < 5 && qty > 2, 0.05),
-                new DiscountPerAmount(amount -> amount < 3000, qty -> qty >= 5, 0.06)
-        ));
+	public DiscountApplier build() {
 
-    }
+		List<DiscountStrategy> discounts = new ArrayList<>();
+
+		List<DiscountProduct> allDiscountsPerProduct = repository.getAllDiscountsPerProduct();
+
+		for (DiscountProduct discountProduct : allDiscountsPerProduct) {
+			discounts.add(new DiscountPerProduct(discountProduct.getProducts(), discountProduct.getDiscount()));
+		}
+
+		List<DiscountAmount> allDiscountsPerAmount = repository.getAllDiscountsPerAmount();
+
+		for (DiscountAmount discountAmount : allDiscountsPerAmount) {
+			discounts.add(new DiscountPerAmount(discountAmount.getMinAmount(), discountAmount.getMaxAmount(),
+					discountAmount.getMinItems(), discountAmount.getMaxItems(), discountAmount.getDiscount()));
+		}
+
+		return new DiscountApplier(discounts);
+	}
 }

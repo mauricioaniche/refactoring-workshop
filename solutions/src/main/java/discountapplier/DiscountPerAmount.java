@@ -2,33 +2,35 @@ package discountapplier;
 
 import common.Basket;
 
-public class DiscountPerAmount implements DiscountType {
+public class DiscountPerAmount implements DiscountStrategy {
 
-    private final AmountCheck amount;
-    private final QtyOfItemsCheck qtyOfItems;
-    private final double discountPercentage;
+	private final double minimumAmount;
+	private final double maximumAmount;
+	private final int minNoOfItems;
+	private final int maxNoOfItems;
+	private final double discount;
 
-    interface AmountCheck {
-        boolean check(double amount);
-    }
-    interface QtyOfItemsCheck {
-        boolean check(int qtyOfItems);
-    }
+	public DiscountPerAmount(double minimumAmount, double maximumAmount, int minNoOfItems, int maxNoOfItems,
+	                         double discount) {
+		this.minimumAmount = minimumAmount;
+		this.maximumAmount = maximumAmount;
+		this.minNoOfItems = minNoOfItems;
+		this.maxNoOfItems = maxNoOfItems;
+		this.discount = discount;
+	}
 
-    public DiscountPerAmount(AmountCheck amount, QtyOfItemsCheck qtyOfItems, double discountPercentage) {
-        this.amount = amount;
-        this.qtyOfItems = qtyOfItems;
-        this.discountPercentage = discountPercentage;
-    }
+	@Override
+	public boolean shouldBeApplied(Basket basket) {
+		int qtyOfItems = basket.qtyOfItems();
+		double amount = basket.getAmount();
 
-    @Override
-    public boolean apply(Basket basket) {
-        boolean matchesThisDiscount = amount.check(basket.getAmount()) && qtyOfItems.check(basket.qtyOfItems());
-        if(matchesThisDiscount) {
-            basket.subtract(basket.getAmount() * discountPercentage);
-            return true;
-        }
+		boolean withinItemsLimit = qtyOfItems >= minNoOfItems && qtyOfItems <= maxNoOfItems;
+		boolean withinAmountLimit = amount >= minimumAmount && amount <= maximumAmount;
 
-        return false;
-    }
+		return withinItemsLimit && withinAmountLimit;
+	}
+
+	public void apply(Basket basket) {
+		basket.applyDiscountByPercentage(discount);
+	}
 }

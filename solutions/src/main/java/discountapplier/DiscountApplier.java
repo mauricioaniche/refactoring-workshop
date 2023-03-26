@@ -6,17 +6,19 @@ import java.util.List;
 
 public class DiscountApplier {
 
-    private final List<DiscountType> discounts;
+    private final List<DiscountStrategy> discounts;
 
-    public DiscountApplier(List<DiscountType> discounts) {
+    public DiscountApplier(List<DiscountStrategy> discounts) {
         this.discounts = discounts;
     }
 
     public void apply(Basket basket) {
-        for (DiscountType discount : discounts) {
-            boolean discountApplied = discount.apply(basket);
-            if(discountApplied)
+        for (DiscountStrategy discount : discounts) {
+            if(discount.shouldBeApplied(basket)) {
+                discount.apply(basket);
                 break;
+            }
         }
     }
+
 }
